@@ -1,0 +1,37 @@
+all_targets=adc_module/ tests/ deploy/
+
+install:
+	pip install .
+	pip install ."[development]"
+	pip install ."[micropython_deploy]"
+	pip install ."[format]"
+	pip install ."[lint]"
+	pip install ."[test]"
+
+lint:
+	black $(all_targets)
+	ruff check $(all_targets)
+	mypy $(all_targets)
+
+test:
+	export PYTHONPATH=./adc_module; pytest tests/adc_module 
+
+all: lint test
+
+micro-cleanup-all:
+	mpremote run deploy/cleanup.py
+
+micro-common: 
+	mpremote fs cp python_dummies/typing.py :typing.py 
+	mpremote fs cp python_dummies/abc.py :abc.py 
+	mpremote fs mkdir collections 
+	mpremote fs cp python_dummies/collections/abc.py :collections/abc.py 
+
+adc-module: micro-cleanup-all micro-common
+	mpremote fs cp adc_module/base.py :base.py 
+	mpremote fs cp adc_module/adc_module_logic.py :adc_module_logic.py 
+	mpremote fs cp adc_module/hardware.py :hardware.py 
+	mpremote fs cp adc_module/main.py :main.py 
+	mpremote reset
+
+ 
