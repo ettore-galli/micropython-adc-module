@@ -1,7 +1,7 @@
 import utime  # type: ignore[import-not-found]
 from machine import ADC  # type: ignore[import-not-found]
 
-from base import BaseADC  # type: ignore[import-untyped]
+from adc_module.base import BaseADC
 
 
 def sleep_ms(ms: float) -> None:

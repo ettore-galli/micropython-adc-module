@@ -1,5 +1,5 @@
-from adc_module_logic import GhostDetector  # type: ignore[import-untyped]
-from hardware import MachineADC, sleep_ms  # type: ignore[import-untyped]
+from adc_module.adc_module_logic import GhostDetector
+from adc_module.hardware import MachineADC, sleep_ms
 
 if __name__ == "__main__":
     adc_module = GhostDetector(adc_class=MachineADC, sleep_ms=sleep_ms)

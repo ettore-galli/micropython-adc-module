@@ -28,9 +28,11 @@ micro-common:
 	mpremote fs cp python_dummies/collections/abc.py :collections/abc.py 
 
 adc-module: micro-cleanup-all micro-common
-	mpremote fs cp adc_module/base.py :base.py 
-	mpremote fs cp adc_module/adc_module_logic.py :adc_module_logic.py 
-	mpremote fs cp adc_module/hardware.py :hardware.py 
+	mpremote fs mkdir adc_module 
+	mpremote fs cp adc_module/base.py :adc_module/base.py 
+	mpremote fs cp adc_module/adc_module_logic.py :adc_module/adc_module_logic.py 
+	mpremote fs cp adc_module/hardware.py :adc_module/hardware.py 
+	
 	mpremote fs cp adc_module/main.py :main.py 
 	mpremote reset
 

@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from math import cos
 
-from base import BaseADC  # type: ignore[import-untyped]
+from adc_module.base import BaseADC
 
 
 class HardwareInformation:
