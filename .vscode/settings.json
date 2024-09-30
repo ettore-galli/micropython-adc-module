@@ -3,7 +3,6 @@
     "python.testing.pytestArgs": [
         "-s",
         "-vvv",
-        "tests/led_game",
         "tests/adc_module"
     ],
     "python.testing.unittestEnabled": false,
