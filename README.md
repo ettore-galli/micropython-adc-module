@@ -6,4 +6,6 @@ Micropython universal ADC module for various applications and functionalities
 
 ```shell
 pip install pip-tools
+
+make install
 ```
