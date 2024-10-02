@@ -10,6 +10,7 @@ class HardwareInformation:
 
 class ParameterConfiguration:
     adc_delay_ms: int = 20
+    dft_chunk_size: int = 32
 
 
 class GhostDetector:
@@ -93,7 +94,7 @@ class GhostDetector:
     def send_to_dft(self, raw_adc_value: int) -> None:
         self.samples.append(raw_adc_value)
 
-        if len(self.samples) == 32:  # noqa: PLR2004
+        if len(self.samples) == self.parameter_configuration.dft_chunk_size:
             dft = self.perform_r_dft(samples=self.samples)
             self.plot_dft(
                 values=dft, fsample=1000 / self.parameter_configuration.adc_delay_ms
