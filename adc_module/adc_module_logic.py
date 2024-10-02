@@ -9,7 +9,7 @@ class HardwareInformation:
 
 
 class ParameterConfiguration:
-    adc_delay_ms: int = 25
+    adc_delay_ms: int = 20
 
 
 class GhostDetector:
@@ -38,6 +38,8 @@ class GhostDetector:
 
         self.adc = self.adc_class(self.hardware_information.adc_pin)
 
+        self.samples: list[float] = []
+
     def read_adc_values_loop(
         self,
         sample_value_reader: Callable[[], int],
@@ -45,13 +47,13 @@ class GhostDetector:
     ) -> None:
 
         while True:
-
             raw_adc_value = sample_value_reader()
             sample_value_consumer(raw_adc_value)
             self.sleep_ms(self.parameter_configuration.adc_delay_ms)
 
     @staticmethod
     def perform_r_dft(samples: list[float]) -> list[float]:
+        # https://www.audiolabs-erlangen.de/resources/MIR/PCP/PCP_09_dft.html#exercise_freq_index
         def r_dft_term(
             n_samples: float, samples: list[float], nth_freq: float
         ) -> float:
@@ -69,8 +71,34 @@ class GhostDetector:
 
         return [
             r_dft_term(len(samples), samples, index)
-            for index, sample in enumerate(samples)
+            for index in range(int(len(samples) / 2))
         ]
+
+    @staticmethod
+    def normalize(values: list[float], top: int) -> list[int]:
+        bottom = min(*values)
+        peaks = max(*values) - min(*values)
+        return [int((point - bottom) * top / peaks) for point in values]
+
+    def plot_dft(self, values: list[float], fsample: float) -> None:
+        print("\n")  # noqa: T201
+        funit = fsample / len(values)
+        for index, point in enumerate(self.normalize(values, 64)):
+            freq = funit * index
+            dsp_freq = (" " * 7 + str(freq))[-7:]
+            print(  # noqa: T201
+                dsp_freq, ("-" * (point - 1) if point > 1 else "") + "*"
+            )
+
+    def send_to_dft(self, raw_adc_value: int) -> None:
+        self.samples.append(raw_adc_value)
+
+        if len(self.samples) == 32:  # noqa: PLR2004
+            dft = self.perform_r_dft(samples=self.samples)
+            self.plot_dft(
+                values=dft, fsample=1000 / self.parameter_configuration.adc_delay_ms
+            )
+            self.samples = []
 
     def notify_value(self, value: int) -> None:
         stars = int(value / 1024)
@@ -80,5 +108,5 @@ class GhostDetector:
     def main(self) -> None:
         self.read_adc_values_loop(
             sample_value_reader=self.adc.read_u16,
-            sample_value_consumer=self.notify_value,
+            sample_value_consumer=self.send_to_dft,
         )
