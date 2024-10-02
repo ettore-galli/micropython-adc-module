@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from math import sin
 
 from adc_module.adc_module_logic import GhostDetector
@@ -14,7 +15,7 @@ def plot(values: list[float]) -> None:
         print(("-" * (point - 1) if point > 1 else "") + "*")  # noqa: T201
 
 
-def test_dft() -> None:
+def test_perform_mod_dft() -> None:
     domain = range(32)
     samples = [
         (
@@ -25,7 +26,7 @@ def test_dft() -> None:
         for index in domain
     ]
 
-    dft = GhostDetector.perform_r_dft(samples)
+    dft = GhostDetector.perform_mod_dft(samples)
 
     assert len(dft) == len(domain) / 2
 
@@ -47,3 +48,25 @@ def test_dft() -> None:
         0.03906003015414369,
         0.03860245747810537,
     ]
+
+
+def test_performance() -> None:
+    domain = range(32)
+    samples = [
+        (
+            sin(3 * 6.28 * index / len(domain))
+            + sin(3 * 6.28 * 2 * index / len(domain))
+            + sin(3 * 6.28 * 3 * index / len(domain))
+        )
+        for index in domain
+    ]
+
+    number_of_test_iterations = 2
+
+    t0 = datetime.now(tz=UTC)
+    for _ in range(number_of_test_iterations):
+        _ = GhostDetector.perform_mod_dft(samples)
+    t1 = datetime.now(tz=UTC)
+    delta2 = t1 - t0
+
+    assert delta2.microseconds > 0

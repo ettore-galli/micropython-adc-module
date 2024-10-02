@@ -53,27 +53,26 @@ class GhostDetector:
             self.sleep_ms(self.parameter_configuration.adc_delay_ms)
 
     @staticmethod
-    def perform_r_dft(samples: list[float]) -> list[float]:
+    def perform_mod_dft(samples: list[float]) -> list[float]:
         # https://www.audiolabs-erlangen.de/resources/MIR/PCP/PCP_09_dft.html#exercise_freq_index
-        def r_dft_term(
-            n_samples: float, samples: list[float], nth_freq: float
-        ) -> float:
+        n_samples: int = int(len(samples))
+        index_range = range(n_samples)
+        half_range = range(n_samples // 2)
+
+        def r_dft_term(samples: list[float], nth_freq: float) -> float:
             real, imag = (
                 sum(
                     samples[index] * cos(6.28 * index * nth_freq / n_samples)
-                    for index in range(int(n_samples))
+                    for index in index_range
                 ),
                 sum(
                     samples[index] * cos(6.28 * index * nth_freq / n_samples)
-                    for index in range(int(n_samples))
+                    for index in index_range
                 ),
             )
             return (real**2 + imag**2) ** 0.5
 
-        return [
-            r_dft_term(len(samples), samples, index)
-            for index in range(int(len(samples) / 2))
-        ]
+        return [r_dft_term(samples, index) for index in half_range]
 
     @staticmethod
     def normalize(values: list[float], top: int) -> list[int]:
@@ -95,7 +94,7 @@ class GhostDetector:
         self.samples.append(raw_adc_value)
 
         if len(self.samples) == self.parameter_configuration.dft_chunk_size:
-            dft = self.perform_r_dft(samples=self.samples)
+            dft = self.perform_mod_dft(samples=self.samples)
             self.plot_dft(
                 values=dft, fsample=1000 / self.parameter_configuration.adc_delay_ms
             )
