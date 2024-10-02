@@ -1,10 +1,10 @@
 from datetime import UTC, datetime
 from math import sin
 
-from adc_module.adc_module_logic import GhostDetector
+from adc_module.fft import dft
 
 
-def test_perform_mod_dft() -> None:
+def test_dft() -> None:
     domain = range(32)
     samples = [
         (
@@ -15,11 +15,11 @@ def test_perform_mod_dft() -> None:
         for index in domain
     ]
 
-    dft = GhostDetector.perform_mod_dft(samples)
+    calc_dft = dft(samples)
 
-    assert len(dft) == len(domain) / 2
+    assert len(calc_dft) == len(domain) / 2
 
-    assert dft == [
+    assert calc_dft == [
         0.029045950679708277,
         0.02911756937521813,
         0.02933403343541255,
@@ -54,7 +54,7 @@ def test_performance() -> None:
 
     t0 = datetime.now(tz=UTC)
     for _ in range(number_of_test_iterations):
-        _ = GhostDetector.perform_mod_dft(samples)
+        _ = dft(samples)
     t1 = datetime.now(tz=UTC)
     delta2 = t1 - t0
 

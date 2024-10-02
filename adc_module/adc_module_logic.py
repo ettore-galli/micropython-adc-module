@@ -1,7 +1,7 @@
 from collections.abc import Callable
-from math import cos, sin
 
 from adc_module.base import BaseADC
+from adc_module.fft import dft
 
 
 class HardwareInformation:
@@ -53,33 +53,6 @@ class GhostDetector:
             self.sleep_ms(self.parameter_configuration.adc_delay_ms)
 
     @staticmethod
-    def perform_mod_dft(samples: list[float]) -> list[float]:
-        # https://www.audiolabs-erlangen.de/resources/MIR/PCP/PCP_09_dft.html#exercise_freq_index
-        n_samples: int = int(len(samples))
-        index_range = range(n_samples)
-        half_range = range(n_samples // 2)
-
-        def dft_term(samples: list[float], freq_index: float) -> float:
-            return (
-                (
-                    sum(
-                        samples[index] * cos(6.28 * index * freq_index / n_samples)
-                        for index in index_range
-                    )
-                    ** 2
-                )
-                + (
-                    sum(
-                        samples[index] * sin(6.28 * index * freq_index / n_samples)
-                        for index in index_range
-                    )
-                    ** 2
-                )
-            ) ** 0.5
-
-        return [dft_term(samples, index) for index in half_range]
-
-    @staticmethod
     def normalize(values: list[float], top: int) -> list[int]:
         bottom = min(*values)
         peaks = max(*values) - min(*values)
@@ -99,9 +72,10 @@ class GhostDetector:
         self.samples.append(raw_adc_value)
 
         if len(self.samples) == self.parameter_configuration.dft_chunk_size:
-            dft = self.perform_mod_dft(samples=self.samples)
+            dft_data = dft(samples=self.samples)
             self.plot_dft(
-                values=dft, fsample=1000 / self.parameter_configuration.adc_delay_ms
+                values=dft_data,
+                fsample=1000 / self.parameter_configuration.adc_delay_ms,
             )
             self.samples = []
 
