@@ -4,17 +4,6 @@ from math import sin
 from adc_module.adc_module_logic import GhostDetector
 
 
-def normalize(values: list[float], top: int) -> list[int]:
-    bottom = min(*values)
-    peaks = max(*values) - min(*values)
-    return [int((point - bottom) * top / peaks) for point in values]
-
-
-def plot(values: list[float]) -> None:
-    for point in normalize(values, 64):
-        print(("-" * (point - 1) if point > 1 else "") + "*")  # noqa: T201
-
-
 def test_perform_mod_dft() -> None:
     domain = range(32)
     samples = [
@@ -31,22 +20,22 @@ def test_perform_mod_dft() -> None:
     assert len(dft) == len(domain) / 2
 
     assert dft == [
-        0.04107717738326346,
-        0.041069782325346256,
-        0.04104747844926989,
-        0.041009903442527154,
-        0.04095643214248368,
-        0.04088614228788678,
-        0.04079776160146007,
-        0.040689590199818375,
-        0.04055938882751079,
-        0.04040421790439347,
-        0.04022020334111717,
-        0.04000218967330871,
-        0.039743213726489625,
-        0.03943368128446656,
-        0.03906003015414369,
-        0.03860245747810537,
+        0.029045950679708277,
+        0.02911756937521813,
+        0.02933403343541255,
+        16.001723069350735,
+        0.03022470518647224,
+        0.030919911319971193,
+        15.994754412546285,
+        0.03289761484139758,
+        0.03423379716590294,
+        15.986482089356826,
+        0.03780488800478127,
+        0.040163523552789716,
+        0.04302343216516519,
+        0.046516605985673275,
+        0.05082988318139054,
+        0.056236398960222214,
     ]
 
 

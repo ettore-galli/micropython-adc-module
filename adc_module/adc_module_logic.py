@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from math import cos
+from math import cos, sin
 
 from adc_module.base import BaseADC
 
@@ -9,7 +9,7 @@ class HardwareInformation:
 
 
 class ParameterConfiguration:
-    adc_delay_ms: int = 20
+    adc_delay_ms: int = 2
     dft_chunk_size: int = 32
 
 
@@ -59,20 +59,25 @@ class GhostDetector:
         index_range = range(n_samples)
         half_range = range(n_samples // 2)
 
-        def r_dft_term(samples: list[float], nth_freq: float) -> float:
-            real, imag = (
-                sum(
-                    samples[index] * cos(6.28 * index * nth_freq / n_samples)
-                    for index in index_range
-                ),
-                sum(
-                    samples[index] * cos(6.28 * index * nth_freq / n_samples)
-                    for index in index_range
-                ),
-            )
-            return (real**2 + imag**2) ** 0.5
+        def dft_term(samples: list[float], freq_index: float) -> float:
+            return (
+                (
+                    sum(
+                        samples[index] * cos(6.28 * index * freq_index / n_samples)
+                        for index in index_range
+                    )
+                    ** 2
+                )
+                + (
+                    sum(
+                        samples[index] * sin(6.28 * index * freq_index / n_samples)
+                        for index in index_range
+                    )
+                    ** 2
+                )
+            ) ** 0.5
 
-        return [r_dft_term(samples, index) for index in half_range]
+        return [dft_term(samples, index) for index in half_range]
 
     @staticmethod
     def normalize(values: list[float], top: int) -> list[int]:
