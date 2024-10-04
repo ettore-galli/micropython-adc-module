@@ -63,11 +63,11 @@ def complex_mod(term: tuple[float, float]) -> float:
     return (term[0] ** 2 + term[1] ** 2) ** 0.5
 
 
-def fft_term(reordered_samples: list[float], freq_index: int) -> tuple[float, float]:
+def fft_term(
+    initial_fft_term: list[tuple[float, float]], freq_index: int
+) -> tuple[float, float]:
     size = 1
-    fft_term: list[tuple[float, float]] = [
-        (sample, 0.0) for sample in reordered_samples
-    ]
+    fft_term: list[tuple[float, float]] = initial_fft_term
     while len(fft_term) > 1:
         size = size << 1
         w_k_term = calculate_w_k_term(size=size, k_index=freq_index)
@@ -83,11 +83,14 @@ def fft(
     samples: list[float], *, compute_half_range: bool = True
 ) -> list[tuple[float, float]]:
     reordered_samples = arrange_samples(samples=samples)
+    initial_fft_term: list[tuple[float, float]] = [
+        (sample, 0.0) for sample in reordered_samples
+    ]
     n_samples: int = int(len(samples))
     half_range = range(n_samples // 2)
 
     return [
-        fft_term(reordered_samples=reordered_samples, freq_index=index)
+        fft_term(initial_fft_term=initial_fft_term, freq_index=index)
         for index in (half_range if compute_half_range else range(len(samples)))
     ]
 
