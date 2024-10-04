@@ -73,12 +73,18 @@ def fft_term(reordered_samples: list[float], freq_index: int) -> tuple[float, fl
     return fft_term[0]
 
 
-def fft(samples: list[float]) -> list[float]:
+def fft(
+    samples: list[float], *, compute_half_range: bool = True
+) -> list[tuple[float, float]]:
     reordered_samples = arrange_samples(samples=samples)
     n_samples: int = int(len(samples))
     half_range = range(n_samples // 2)
 
     return [
-        complex_mod(fft_term(reordered_samples=reordered_samples, freq_index=index))
-        for index in half_range
+        fft_term(reordered_samples=reordered_samples, freq_index=index)
+        for index in (half_range if compute_half_range else range(len(samples)))
     ]
+
+
+def fft_power(samples: list[float]) -> list[float]:
+    return [complex_mod(point) for point in fft(samples, compute_half_range=True)]
