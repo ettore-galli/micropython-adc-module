@@ -43,12 +43,8 @@ def arrange_samples(samples: list[float]) -> list[float]:
     return arranged
 
 
-def calculate_w_k_term(k_index_size_ratio: float) -> tuple[float, float]:
-    return (cos(-6.28 * k_index_size_ratio), sin(-6.28 * k_index_size_ratio))
-
-
-def calculate_w_k_term_cached(k_index_size_ratio: float) -> tuple[float, float]:
-    return (cos(-6.28 * k_index_size_ratio), sin(-6.28 * k_index_size_ratio))
+def calculate_w_k_term(size: int, k_index: int) -> tuple[float, float]:
+    return (cos(-6.28 * k_index / size), sin(-6.28 * k_index / size))
 
 
 def complex_mult(
@@ -74,8 +70,7 @@ def fft_term(
     fft_term: list[tuple[float, float]] = initial_fft_term
     while len(fft_term) > 1:
         size = size << 1
-        k_index_size_ratio: float = freq_index / size
-        w_k_term = calculate_w_k_term(k_index_size_ratio=k_index_size_ratio)
+        w_k_term = calculate_w_k_term(size=size, k_index=freq_index)
 
         fft_term = [
             complex_sum(fft_term[index], complex_mult(w_k_term, fft_term[index + 1]))
