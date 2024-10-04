@@ -29,12 +29,18 @@ def dft(samples: list[float]) -> list[float]:
 
 
 def arrange_samples(samples: list[float]) -> list[float]:
-    if len(samples) == 1:
-        return samples
+    size: int = len(samples)
+    arranged: list[float] = samples
+    while size > 1:
+        arranged_buffer: list[float] = []
+        for start in range(0, len(samples), size):
+            buffer: list[float] = arranged[start : start + size]
+            buffer = buffer[0 : len(buffer) : 2] + buffer[1 : len(buffer) : 2]
+            arranged_buffer += buffer
+        arranged = arranged_buffer
+        size = size >> 1
 
-    return arrange_samples(samples[0 : len(samples) : 2]) + arrange_samples(
-        samples[1 : len(samples) : 2]
-    )
+    return arranged
 
 
 def calculate_w_k_term(size: int, k_index: int) -> tuple[float, float]:

@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 from math import sin
 
-from adc_module.fft import dft
+from adc_module.fft import dft, fft_power
 
 
 def test_dft() -> None:
@@ -50,12 +50,19 @@ def test_performance() -> None:
         for index in domain
     ]
 
-    number_of_test_iterations = 2
+    number_of_test_iterations = 200
 
     t0 = datetime.now(tz=UTC)
     for _ in range(number_of_test_iterations):
         _ = dft(samples)
     t1 = datetime.now(tz=UTC)
+    delta1 = t1 - t0
+
+    t0 = datetime.now(tz=UTC)
+    for _ in range(number_of_test_iterations):
+        _ = fft_power(samples)
+    t1 = datetime.now(tz=UTC)
     delta2 = t1 - t0
 
+    assert delta1.microseconds > 0
     assert delta2.microseconds > 0
