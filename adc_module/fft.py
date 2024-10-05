@@ -2,23 +2,23 @@ from math import cos, sin
 
 
 def dft(samples: list[float]) -> list[float]:
-    # https://www.audiolabs-erlangen.de/resources/MIR/PCP/PCP_09_dft.html#exercise_freq_index
+    # https://www.audiolabs-erlangen.de/resources/MIR/PCP/PCP_09_dft.html#exercise_k_index
     n_samples: int = int(len(samples))
     index_range = range(n_samples)
     half_range = range(n_samples // 2)
 
-    def dft_term(samples: list[float], freq_index: float) -> float:
+    def dft_term(samples: list[float], k_index: float) -> float:
         return (
             (
                 sum(
-                    samples[index] * cos(6.28 * index * freq_index / n_samples)
+                    samples[index] * cos(6.28 * index * k_index / n_samples)
                     for index in index_range
                 )
                 ** 2
             )
             + (
                 sum(
-                    samples[index] * sin(6.28 * index * freq_index / n_samples)
+                    samples[index] * sin(6.28 * index * k_index / n_samples)
                     for index in index_range
                 )
                 ** 2
@@ -64,13 +64,13 @@ def complex_mod(term: tuple[float, float]) -> float:
 
 
 def fft_term(
-    initial_fft_term: list[tuple[float, float]], freq_index: int
+    initial_fft_term: list[tuple[float, float]], k_index: int
 ) -> tuple[float, float]:
     size = 1
     fft_term: list[tuple[float, float]] = initial_fft_term
     while len(fft_term) > 1:
         size = size << 1
-        w_k_term = calculate_w_k_term(size=size, k_index=freq_index)
+        w_k_term = calculate_w_k_term(size=size, k_index=k_index)
 
         fft_term = [
             complex_sum(fft_term[index], complex_mult(w_k_term, fft_term[index + 1]))
@@ -90,7 +90,7 @@ def fft(
     half_range = range(n_samples // 2)
 
     return [
-        fft_term(initial_fft_term=initial_fft_term, freq_index=index)
+        fft_term(initial_fft_term=initial_fft_term, k_index=index)
         for index in (half_range if compute_half_range else range(len(samples)))
     ]
 
