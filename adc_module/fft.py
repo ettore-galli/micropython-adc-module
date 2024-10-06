@@ -1,4 +1,4 @@
-from math import cos, sin
+from math import cos, sin, tau
 
 
 def arrange_samples(samples: list[float]) -> list[float]:
@@ -17,7 +17,7 @@ def arrange_samples(samples: list[float]) -> list[float]:
 
 
 def calculate_w_k_term(size: int, k_index: int) -> tuple[float, float]:
-    return (cos(-6.28 * k_index / size), sin(-6.28 * k_index / size))
+    return (cos(-1 * tau * k_index / size), sin(-1 * tau * k_index / size))
 
 
 def complex_mult(
