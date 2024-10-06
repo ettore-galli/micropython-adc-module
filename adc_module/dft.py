@@ -1,9 +1,9 @@
 from math import cos, pi, sin
 
-Complex = tuple[float, float]
 
-
-def dft(samples: list[float], *, compute_half_range: bool = True) -> list[Complex]:
+def dft(
+    samples: list[float], *, compute_half_range: bool = True
+) -> list[tuple[float, float]]:
     """
     Reference:
     https://scistatcalc.blogspot.com/2013/12/fft-calculator.html
@@ -15,7 +15,7 @@ def dft(samples: list[float], *, compute_half_range: bool = True) -> list[Comple
     index_range = range(n_samples)
     half_range = range(n_samples // 2)
 
-    def dft_term(samples: list[float], k_index: float) -> Complex:
+    def dft_term(samples: list[float], k_index: float) -> tuple[float, float]:
         return (
             sum(
                 samples[index] * cos(-2.0 * pi * index * k_index / n_samples)
@@ -33,7 +33,7 @@ def dft(samples: list[float], *, compute_half_range: bool = True) -> list[Comple
     ]
 
 
-def complex_mod(term: Complex) -> float:
+def complex_mod(term: tuple[float, float]) -> float:
     return (term[0] ** 2 + term[1] ** 2) ** 0.5
 
 
