@@ -1,4 +1,4 @@
-from math import cos, sin, tau
+from math import cos, pi, sin
 
 Complex = tuple[float, float]
 
@@ -18,11 +18,11 @@ def dft(samples: list[float], *, compute_half_range: bool = True) -> list[Comple
     def dft_term(samples: list[float], k_index: float) -> Complex:
         return (
             sum(
-                samples[index] * cos(-1.0 * tau * index * k_index / n_samples)
+                samples[index] * cos(-2.0 * pi * index * k_index / n_samples)
                 for index in index_range
             ),
             sum(
-                samples[index] * sin(-1.0 * tau * index * k_index / n_samples)
+                samples[index] * sin(-2.0 * pi * index * k_index / n_samples)
                 for index in index_range
             ),
         )

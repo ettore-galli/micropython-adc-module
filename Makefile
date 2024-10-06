@@ -32,7 +32,7 @@ adc-module: micro-cleanup-all micro-common
 	mpremote fs cp adc_module/base.py :adc_module/base.py 
 	mpremote fs cp adc_module/adc_module_logic.py :adc_module/adc_module_logic.py 
 	mpremote fs cp adc_module/hardware.py :adc_module/hardware.py 
-	mpremote fs cp adc_module/fft.py :adc_module/fft.py 
+	mpremote fs cp adc_module/dft.py :adc_module/dft.py 
 	
 	mpremote fs cp adc_module/main.py :main.py 
 	mpremote reset

@@ -1,7 +1,7 @@
 from collections.abc import Callable
 
 from adc_module.base import BaseADC
-from adc_module.fft import fft_power
+from adc_module.dft import dft_power
 
 
 class HardwareInformation:
@@ -10,7 +10,7 @@ class HardwareInformation:
 
 class ParameterConfiguration:
     adc_delay_ms: int = 2
-    fft_chunk_size: int = 32
+    dft_chunk_size: int = 32
 
 
 class GhostDetector:
@@ -58,7 +58,7 @@ class GhostDetector:
         peaks = max(*values) - min(*values)
         return [int((point - bottom) * top / peaks) for point in values]
 
-    def plot_fft(self, values: list[float], fsample: float) -> None:
+    def plot_dft(self, values: list[float], fsample: float) -> None:
         print("\n")  # noqa: T201
         funit = fsample / len(values)
         for index, point in enumerate(self.normalize(values, 64)):
@@ -68,13 +68,13 @@ class GhostDetector:
                 dsp_freq, ("-" * (point - 1) if point > 1 else "") + "*"
             )
 
-    def send_to_fft(self, raw_adc_value: int) -> None:
+    def send_to_dft(self, raw_adc_value: int) -> None:
         self.samples.append(raw_adc_value)
 
-        if len(self.samples) == self.parameter_configuration.fft_chunk_size:
-            fft_data = fft_power(samples=self.samples)
-            self.plot_fft(
-                values=fft_data,
+        if len(self.samples) == self.parameter_configuration.dft_chunk_size:
+            dft_data = dft_power(samples=self.samples)
+            self.plot_dft(
+                values=dft_data,
                 fsample=1000 / self.parameter_configuration.adc_delay_ms,
             )
             self.samples = []
@@ -87,5 +87,5 @@ class GhostDetector:
     def main(self) -> None:
         self.read_adc_values_loop(
             sample_value_reader=self.adc.read_u16,
-            sample_value_consumer=self.send_to_fft,
+            sample_value_consumer=self.send_to_dft,
         )
