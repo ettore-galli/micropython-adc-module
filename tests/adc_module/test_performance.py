@@ -32,3 +32,4 @@ def test_performance() -> None:
 
     assert time_dft.microseconds > 0
     assert time_fft.microseconds > 0
+    print(f"\n DFT: {time_dft.microseconds} FFT: {time_fft.microseconds}")  # noqa: T201
