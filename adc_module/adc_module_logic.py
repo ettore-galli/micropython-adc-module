@@ -11,8 +11,8 @@ class HardwareInformation:
 
 
 class ParameterConfiguration:
-    adc_delay_ms: int = 2
-    dft_chunk_size: int = 32
+    adc_delay_ms: int = 5
+    dft_chunk_size: int = 16
 
 
 class GhostDetector:

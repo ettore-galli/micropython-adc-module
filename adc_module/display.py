@@ -25,8 +25,9 @@ class Display(BaseDisplay):
 
     def plot_dft(self, values: list[int]) -> None:
         self.clear()
+        span = 64 // len(values)
         for index, value in enumerate(values):
-            y_coord = 2 * index
+            y_coord = span * index
             self.hline(1, y_coord, value, 1)
         self.show()
 
