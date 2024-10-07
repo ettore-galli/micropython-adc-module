@@ -20,18 +20,6 @@ def calculate_w_k_term(size: int, k_index: int) -> tuple[float, float]:
     return (cos(-2.0 * pi * k_index / size), sin(-2.0 * pi * k_index / size))
 
 
-def complex_mult(
-    alfa: tuple[float, float], beta: tuple[float, float]
-) -> tuple[float, float]:
-    return alfa[0] * beta[0] - alfa[1] * beta[1], alfa[1] * beta[0] + alfa[0] * beta[1]
-
-
-def complex_sum(
-    alfa: tuple[float, float], beta: tuple[float, float]
-) -> tuple[float, float]:
-    return alfa[0] + beta[0], alfa[1] + beta[1]
-
-
 def complex_mod(term: tuple[float, float]) -> float:
     return (term[0] ** 2 + term[1] ** 2) ** 0.5
 
@@ -46,10 +34,19 @@ def fft_term(
         w_k_term = calculate_w_k_term(size=size, k_index=k_index)
 
         fft_term = [
-            complex_sum(fft_term[index], complex_mult(w_k_term, fft_term[index + 1]))
+            twiddle(fft_term[index], w_k_term, fft_term[index + 1])
             for index in range(0, len(fft_term), 2)
         ]
     return fft_term[0]
+
+
+def twiddle(
+    a: tuple[float, float], w: tuple[float, float], b: tuple[float, float]
+) -> tuple[float, float]:
+    ar, ai = a
+    wr, wi = w
+    br, bi = b
+    return (ar + wr * br - wi * bi, ai + wi * br + wr * bi)
 
 
 def fft(

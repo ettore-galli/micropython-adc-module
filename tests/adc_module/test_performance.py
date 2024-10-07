@@ -16,19 +16,19 @@ def test_performance() -> None:
         for index in domain
     ]
 
-    number_of_test_iterations = 1
+    number_of_test_iterations = 10
 
-    t0 = datetime.now(tz=UTC)
+    t0d = datetime.now(tz=UTC)
     for _ in range(number_of_test_iterations):
         _ = dft(samples)
-    t1 = datetime.now(tz=UTC)
-    time_dft = t1 - t0
+    t1d = datetime.now(tz=UTC)
+    time_dft = t1d - t0d
 
-    t0 = datetime.now(tz=UTC)
+    t0f = datetime.now(tz=UTC)
     for _ in range(number_of_test_iterations):
         _ = fft_power(samples)
-    t1 = datetime.now(tz=UTC)
-    time_fft = t1 - t0
+    t1f = datetime.now(tz=UTC)
+    time_fft = t1f - t0f
 
     assert time_dft.microseconds > 0
     assert time_fft.microseconds > 0
