@@ -22,3 +22,13 @@ class Display(BaseDisplay):
         self.clear()
         self.text(f"v: {value}", 10, 1, 1)
         self.show()
+
+    def plot_dft(self, values: list[int]) -> None:
+        self.clear()
+        for index, value in enumerate(values):
+            y_coord = 2 * index
+            self.hline(1, y_coord, value, 1)
+        self.show()
+
+    def hline(self, x: int, y: int, width: int, color: int) -> None:
+        self.display.hline(x, y, width, color)

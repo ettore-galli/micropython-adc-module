@@ -21,3 +21,9 @@ class BaseDisplay(ABC):
 
     @abstractmethod
     def show_value(self, value: int) -> None: ...
+
+    @abstractmethod
+    def hline(self, x: int, y: int, width: int, color: int) -> None: ...
+
+    @abstractmethod
+    def plot_dft(self, values: list[int]) -> None: ...

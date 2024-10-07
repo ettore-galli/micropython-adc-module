@@ -76,17 +76,13 @@ class GhostDetector:
             print(  # noqa: T201
                 dsp_freq, ("-" * (point - 1) if point > 1 else "") + "*"
             )
-            self.display.show_value(point)
 
     def send_to_dft(self, raw_adc_value: int) -> None:
         self.samples.append(raw_adc_value)
 
         if len(self.samples) == self.parameter_configuration.dft_chunk_size:
             dft_data = dft_power(samples=self.samples)
-            self.plot_dft(
-                values=dft_data,
-                fsample=1000 / self.parameter_configuration.adc_delay_ms,
-            )
+            self.display.plot_dft(values=self.normalize(dft_data, 128))
             self.samples = []
 
     def notify_value(self, value: int) -> None:
