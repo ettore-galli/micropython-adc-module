@@ -1,11 +1,13 @@
 from collections.abc import Callable
 
-from adc_module.base import BaseADC
+from adc_module.base import BaseADC, BaseDisplay
 from adc_module.dft import dft_power
 
 
 class HardwareInformation:
     adc_pin: int = 0
+    display_sda_pin: int = 4
+    display_scl_pin: int = 5
 
 
 class ParameterConfiguration:
@@ -17,6 +19,7 @@ class GhostDetector:
     def __init__(
         self,
         adc_class: type[BaseADC],
+        display_class: type[BaseDisplay],
         sleep_ms: Callable[[float], None],
         hardware_information: HardwareInformation | None = None,
         parameter_configuration: ParameterConfiguration | None = None,
@@ -40,6 +43,12 @@ class GhostDetector:
         self.adc = self.adc_class(self.hardware_information.adc_pin)
 
         self.samples: list[float] = []
+
+        self.display_class: type[BaseDisplay] = display_class
+        self.display: BaseDisplay = self.display_class(
+            sda_pin=self.hardware_information.display_sda_pin,
+            scl_pin=self.hardware_information.display_scl_pin,
+        )
 
     def read_adc_values_loop(
         self,
@@ -67,6 +76,7 @@ class GhostDetector:
             print(  # noqa: T201
                 dsp_freq, ("-" * (point - 1) if point > 1 else "") + "*"
             )
+            self.display.show_value(point)
 
     def send_to_dft(self, raw_adc_value: int) -> None:
         self.samples.append(raw_adc_value)
