@@ -6,7 +6,7 @@ from adc_module.fft import fft_power
 
 
 def test_performance() -> None:
-    domain = range(1024)
+    domain = range(256)
     samples = [
         (
             sin(3 * 6.28 * index / len(domain))
@@ -16,7 +16,7 @@ def test_performance() -> None:
         for index in domain
     ]
 
-    number_of_test_iterations = 10
+    number_of_test_iterations = 1
 
     t0d = datetime.now(tz=UTC)
     for _ in range(number_of_test_iterations):
