@@ -58,6 +58,16 @@ class DftCalculator:
             for k_index in (self.half_range if compute_half_range else self.index_range)
         ]
 
+    @staticmethod
+    def complex_mod(term: tuple[float, float]) -> float:
+        return (term[0] ** 2 + term[1] ** 2) ** 0.5
+
+    def dft_power(self, samples: list[float]) -> list[float]:
+        return [
+            self.complex_mod(item)
+            for item in self.dft(samples, compute_half_range=True)
+        ]
+
 
 def dft(
     samples: list[float], *, compute_half_range: bool = True

@@ -98,6 +98,11 @@ def test_dft_calculator() -> None:
     expected_dft = EXPECTED_DFT
     assert [(round(real, 6), round(imag, 6)) for real, imag in calc_dft] == expected_dft
 
+    calc_dft_power = dft_calculator.dft_power(samples)
+    assert [round(value, 4) for value in calc_dft_power] == [
+        round(complex_mod(value), 4) for value in EXPECTED_DFT[: len(calc_dft_power)]
+    ]
+
 
 def test_dft_power() -> None:
     domain = range(32)
