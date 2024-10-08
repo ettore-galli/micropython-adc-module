@@ -4,7 +4,7 @@ from math import cos, pi, sin
 class DftCalculator:
     def __init__(self, data_length: int) -> None:
         self.data_length: int = data_length
-        self.twiddle_factors: dict[tuple[int, int], tuple[float, float]] = (
+        self.twiddle_factors: dict[int, dict[int, tuple[float, float]]] = (
             self.precompute_twiddle_factors(data_length=data_length)
         )
         self.index_range: list[int] = list(range(self.data_length))
@@ -13,13 +13,15 @@ class DftCalculator:
     @staticmethod
     def precompute_twiddle_factors(
         data_length: int,
-    ) -> dict[tuple[int, int], tuple[float, float]]:
+    ) -> dict[int, dict[int, tuple[float, float]]]:
         return {
-            (index, k_index): (
-                cos(-2.0 * pi * index * k_index / data_length),
-                sin(-2.0 * pi * index * k_index / data_length),
-            )
-            for index in range(data_length)
+            k_index: {
+                index: (
+                    cos(-2.0 * pi * index * k_index / data_length),
+                    sin(-2.0 * pi * index * k_index / data_length),
+                )
+                for index in range(data_length)
+            }
             for k_index in range(data_length)
         }
 
@@ -33,21 +35,27 @@ class DftCalculator:
         https://en.wikipedia.org/wiki/Discrete_Fourier_transform
         """
 
-        def dft_term(samples: list[float], k_index: int) -> tuple[float, float]:
+        def dft_term(
+            samples: list[float],
+            twiddle_factors: dict[int, tuple[float, float]],
+        ) -> tuple[float, float]:
             return (
                 sum(
-                    samples[index] * self.twiddle_factors[(index, k_index)][0]
+                    samples[index] * twiddle_factors[index][0]
                     for index in self.index_range
                 ),
                 sum(
-                    samples[index] * self.twiddle_factors[(index, k_index)][1]
+                    samples[index] * twiddle_factors[index][1]
                     for index in self.index_range
                 ),
             )
 
         return [
-            dft_term(samples=samples, k_index=index)
-            for index in (self.half_range if compute_half_range else self.index_range)
+            dft_term(
+                samples=samples,
+                twiddle_factors=self.twiddle_factors[k_index],
+            )
+            for k_index in (self.half_range if compute_half_range else self.index_range)
         ]
 
 
