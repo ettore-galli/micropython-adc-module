@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 from math import sin
 
-from adc_module.dft import dft
+from adc_module.dft import DftCalculator, dft
 from adc_module.fft import fft_power
 
 
@@ -16,13 +16,21 @@ def test_performance() -> None:
         for index in domain
     ]
 
-    number_of_test_iterations = 1
+    dft_calculator = DftCalculator(data_length=len(samples))
+
+    number_of_test_iterations = 5
 
     t0d = datetime.now(tz=UTC)
     for _ in range(number_of_test_iterations):
         _ = dft(samples)
     t1d = datetime.now(tz=UTC)
     time_dft = t1d - t0d
+
+    t0dp = datetime.now(tz=UTC)
+    for _ in range(number_of_test_iterations):
+        _ = dft_calculator.dft(samples)
+    t1dp = datetime.now(tz=UTC)
+    time_dft_ptf = t1dp - t0dp
 
     t0f = datetime.now(tz=UTC)
     for _ in range(number_of_test_iterations):
@@ -32,4 +40,9 @@ def test_performance() -> None:
 
     assert time_dft.microseconds > 0
     assert time_fft.microseconds > 0
-    print(f"\n DFT: {time_dft.microseconds} FFT: {time_fft.microseconds}")  # noqa: T201
+
+    print(  # noqa: T201
+        f"\nDFT/standard : {time_dft.microseconds} "
+        f"\nDFT/precalc  : {time_dft_ptf.microseconds}"
+        f"\nFFT/standard : {time_fft.microseconds}"
+    )

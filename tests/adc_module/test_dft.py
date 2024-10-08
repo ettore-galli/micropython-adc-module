@@ -1,4 +1,4 @@
-from adc_module.dft import complex_mod, dft, dft_power
+from adc_module.dft import DftCalculator, complex_mod, dft, dft_power
 
 EXAMPLE_SAMPLES = [
     0.0,
@@ -78,6 +78,20 @@ def test_dft() -> None:
     samples = EXAMPLE_SAMPLES
 
     calc_dft = dft(samples, compute_half_range=False)
+
+    assert len(calc_dft) == len(domain)
+
+    expected_dft = EXPECTED_DFT
+    assert [(round(real, 6), round(imag, 6)) for real, imag in calc_dft] == expected_dft
+
+
+def test_dft_calculator() -> None:
+    domain = range(32)
+    samples = EXAMPLE_SAMPLES
+
+    dft_calculator = DftCalculator(data_length=len(samples))
+
+    calc_dft = dft_calculator.dft(samples, compute_half_range=False)
 
     assert len(calc_dft) == len(domain)
 
