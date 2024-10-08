@@ -43,6 +43,6 @@ def test_performance() -> None:
 
     print(  # noqa: T201
         f"\nDFT/standard : {time_dft.microseconds} "
-        f"\nDFT/calc     : {time_dft_ptf.microseconds}"
+        f"\nDFT/precalc  : {time_dft_ptf.microseconds}"
         f"\nFFT/standard : {time_fft.microseconds}"
     )
