@@ -1,4 +1,4 @@
-from adc_module.fft import arrange_samples, complex_mod, fft, fft_power
+from adc_module.fft import arrange_samples, fft, fft_power
 
 EXAMPLE_SAMPLES = [
     0.0,
@@ -71,6 +71,10 @@ EXPECTED_DFT = [
     (0.041498, -0.049306),
     (0.038967, -0.003318),
 ]
+
+
+def complex_mod(term: tuple[float, float]) -> float:
+    return (term[0] ** 2 + term[1] ** 2) ** 0.5
 
 
 def test_arrange_samples() -> None:

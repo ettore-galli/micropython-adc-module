@@ -16,14 +16,6 @@ def arrange_samples(samples: list[float]) -> list[float]:
     return arranged
 
 
-def calculate_w_k_term(size: int, k_index: int) -> tuple[float, float]:
-    return (cos(-2.0 * pi * k_index / size), sin(-2.0 * pi * k_index / size))
-
-
-def complex_mod(term: tuple[float, float]) -> float:
-    return (term[0] ** 2 + term[1] ** 2) ** 0.5
-
-
 def fft_term(
     initial_fft_term: list[tuple[float, float]], k_index: int
 ) -> tuple[float, float]:
@@ -34,7 +26,8 @@ def fft_term(
 
     while len(fft_term) > 1:
         size = size << 1
-        w_k_term = calculate_w_k_term(size=size, k_index=k_index)
+
+        w_k_term = (cos(-2.0 * pi * k_index / size), sin(-2.0 * pi * k_index / size))
 
         fft_term = [
             twiddle(fft_term[index], w_k_term, fft_term[index + 1])
@@ -73,4 +66,7 @@ def fft(
 
 
 def fft_power(samples: list[float]) -> list[float]:
-    return [complex_mod(point) for point in fft(samples, compute_half_range=True)]
+    return [
+        (point[0] ** 2 + point[1] ** 2) ** 0.5
+        for point in fft(samples, compute_half_range=True)
+    ]
