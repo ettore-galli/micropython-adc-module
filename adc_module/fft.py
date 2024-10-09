@@ -22,7 +22,8 @@ def arrange_samples(samples: list[float]) -> list[float]:
 
 
 def fft_term(
-    initial_fft_term: list[tuple[float, float]], k_index: int
+    initial_fft_term: list[tuple[float, float]],
+    k_index: int,
 ) -> tuple[float, float]:
 
     fft_term: list[tuple[float, float]] = initial_fft_term
@@ -61,12 +62,13 @@ def fft(
         (sample, 0.0) for sample in reordered_samples
     ]
 
-    n_samples: int = len(samples)
-
     return [
-        fft_term(initial_fft_term=initial_fft_term, k_index=index)
+        fft_term(
+            initial_fft_term=initial_fft_term,
+            k_index=index,
+        )
         for index in (
-            range(n_samples // 2) if compute_half_range else range(len(samples))
+            range(len(samples) // 2) if compute_half_range else range(len(samples))
         )
     ]
 
