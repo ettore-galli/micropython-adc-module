@@ -36,7 +36,18 @@ def fft_term(
         w_k_term = (cos(-2.0 * pi * k_index / size), sin(-2.0 * pi * k_index / size))
 
         fft_term = [
-            twiddle(fft_term[index], w_k_term, fft_term[index + 1])
+            (
+                (
+                    fft_term[index][0]
+                    + w_k_term[0] * fft_term[index + 1][0]
+                    - w_k_term[1] * fft_term[index + 1][1]
+                ),
+                (
+                    fft_term[index][1]
+                    + w_k_term[1] * fft_term[index + 1][0]
+                    + w_k_term[0] * fft_term[index + 1][1]
+                ),
+            )
             for index in range(0, len(fft_term), 2)
         ]
 
@@ -46,6 +57,7 @@ def fft_term(
 def twiddle(
     a: tuple[float, float], w: tuple[float, float], b: tuple[float, float]
 ) -> tuple[float, float]:
+    "For reference only, not actually used for performance"
     ar, ai = a
     wr, wi = w
     br, bi = b

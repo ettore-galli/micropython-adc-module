@@ -2,7 +2,7 @@ from datetime import UTC, datetime
 from math import sin
 
 from adc_module.dft import DftCalculator, dft
-from adc_module.fft import fft_power
+from adc_module.fft import fft
 
 
 def test_performance() -> None:
@@ -34,7 +34,7 @@ def test_performance() -> None:
 
     t0f = datetime.now(tz=UTC)
     for _ in range(number_of_test_iterations):
-        _ = fft_power(samples)
+        _ = fft(samples)
     t1f = datetime.now(tz=UTC)
     time_fft = t1f - t0f
 
