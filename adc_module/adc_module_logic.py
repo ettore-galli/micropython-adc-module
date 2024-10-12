@@ -1,7 +1,7 @@
 from collections.abc import Callable
 
 from adc_module.base import BaseADC, BaseDisplay
-from adc_module.dft import DftCalculator
+from adc_module.fft import fft_power
 
 
 class HardwareInformation:
@@ -11,7 +11,7 @@ class HardwareInformation:
 
 
 class ParameterConfiguration:
-    adc_delay_ms: int = 5
+    adc_delay_ms: int = 1
     dft_chunk_size: int = 32
 
 
@@ -49,9 +49,6 @@ class GhostDetector:
             sda_pin=self.hardware_information.display_sda_pin,
             scl_pin=self.hardware_information.display_scl_pin,
         )
-        self.dft_calculator = DftCalculator(
-            data_length=self.parameter_configuration.dft_chunk_size
-        )
 
     def read_adc_values_loop(
         self,
@@ -84,7 +81,7 @@ class GhostDetector:
         self.samples.append(raw_adc_value)
 
         if len(self.samples) == self.parameter_configuration.dft_chunk_size:
-            dft_data = self.dft_calculator.dft_power(samples=self.samples)
+            dft_data = fft_power(samples=self.samples)
             self.display.plot_dft(values=self.normalize(dft_data, 128))
             self.samples = []
 
