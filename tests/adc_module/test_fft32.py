@@ -1,4 +1,5 @@
 from adc_module.fft32 import (
+    W_K_TERMS_32,
     fft32,
     fft32_power,
     preorder_samples_32,
@@ -182,3 +183,13 @@ def test_fft32_power() -> None:
     assert [round(value, 4) for value in calc_fft_power] == [
         round(complex_mod(value), 4) for value in EXPECTED_DFT[: len(calc_fft_power)]
     ]
+
+
+def test_remake() -> None:
+    revamped: dict = {}
+    for ktuple, value in W_K_TERMS_32.items():
+        size, k_index = ktuple
+        if k_index not in revamped:
+            revamped[k_index] = {}
+        revamped[k_index][size] = value
+    assert revamped
