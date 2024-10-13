@@ -228,6 +228,8 @@ K_W_TERMS_32 = {
     },
 }
 
+SIZES = [(2, 1), (4, 2), (8, 4), (16, 8), (32, 16)]
+
 
 def preorder_samples_32(samples: list[float]) -> list[float]:
     order = [
@@ -273,14 +275,9 @@ def fft_term_32(
     w_terms: dict[int, tuple[float, float]],
 ) -> tuple[float, float]:
 
-    size = 1
-
-    while size < SAMPLE_LENGTH:
-        size = size << 1
+    for size, step in SIZES:
 
         w_k_term_r, w_k_term_i = w_terms[size]
-
-        step: int = size // 2
 
         for index in range(0, SAMPLE_LENGTH, size):
             fft_term[index] = (
