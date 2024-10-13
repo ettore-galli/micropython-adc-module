@@ -1,8 +1,7 @@
-from adc_module.fft import (
-    arrange_samples,
-    fft,
-    fft_power,
-    preorder_samples,
+from adc_module.fft32 import (
+    fft32,
+    fft32_power,
+    preorder_samples_32,
 )
 
 EXAMPLE_SAMPLES = [
@@ -82,57 +81,89 @@ def complex_mod(term: tuple[float, float]) -> float:
     return (term[0] ** 2 + term[1] ** 2) ** 0.5
 
 
-def test_arrange_samples() -> None:
-    assert arrange_samples([1, 2, 3, 4, 5, 6, 7, 8]) == [1, 5, 3, 7, 2, 6, 4, 8]
-    assert arrange_samples([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]) == [
-        1,
-        9,
-        5,
-        13,
-        3,
-        11,
-        7,
-        15,
-        2,
-        10,
-        6,
-        14,
-        4,
-        12,
-        8,
-        16,
+def test_preorder_samples_32() -> None:
+    samples = [
+        float(sample)
+        for sample in [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+        ]
     ]
-
-
-def test_preorder_samples() -> None:
-    assert preorder_samples([1, 2, 3, 4, 5, 6, 7, 8]) == [1, 5, 3, 7, 2, 6, 4, 8]
-    assert preorder_samples(
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-    ) == [
-        1,
-        9,
-        5,
-        13,
-        3,
-        11,
-        7,
-        15,
-        2,
-        10,
-        6,
-        14,
-        4,
-        12,
-        8,
-        16,
+    expected_preorder = [
+        float(sample)
+        for sample in [
+            0,
+            16,
+            8,
+            24,
+            4,
+            20,
+            12,
+            28,
+            2,
+            18,
+            10,
+            26,
+            6,
+            22,
+            14,
+            30,
+            1,
+            17,
+            9,
+            25,
+            5,
+            21,
+            13,
+            29,
+            3,
+            19,
+            11,
+            27,
+            7,
+            23,
+            15,
+            31,
+        ]
     ]
+    assert preorder_samples_32(samples) == expected_preorder
 
 
-def test_fft() -> None:
+def test_fft32() -> None:
     domain = range(32)
     samples = EXAMPLE_SAMPLES
 
-    calc_fft = fft(samples, compute_half_range=False)
+    calc_fft = fft32(samples, compute_half_range=False)
 
     assert len(calc_fft) == len(domain)
 
@@ -140,11 +171,11 @@ def test_fft() -> None:
     assert [(round(real, 6), round(imag, 6)) for real, imag in calc_fft] == expected_fft
 
 
-def test_fft_power() -> None:
+def test_fft32_power() -> None:
     domain = range(32)
     samples = EXAMPLE_SAMPLES
 
-    calc_fft_power = fft_power(samples)
+    calc_fft_power = fft32_power(samples)
 
     assert len(calc_fft_power) == len(domain) / 2
 

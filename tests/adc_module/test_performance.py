@@ -2,7 +2,8 @@ from datetime import UTC, datetime
 from math import sin
 
 from adc_module.dft import DftCalculator, dft
-from adc_module.fft import fft
+from adc_module.fft import arrange_samples, fft, preorder_samples
+from adc_module.fft32 import preorder_samples_32
 
 
 def test_performance() -> None:
@@ -45,4 +46,32 @@ def test_performance() -> None:
         f"\nDFT/standard : {time_dft.microseconds} "
         f"\nDFT/precalc  : {time_dft_ptf.microseconds}"
         f"\nFFT/standard : {time_fft.microseconds}"
+    )
+
+
+def test_performance_preorder() -> None:
+    samples = [float(sample) for sample in list(range(32))]
+    number_of_test_iterations = 1000
+
+    t0_arrange = datetime.now(tz=UTC)
+    for _ in range(number_of_test_iterations):
+        _ = arrange_samples(samples)
+    t1_arrange = datetime.now(tz=UTC)
+    time_arrange = t1_arrange - t0_arrange
+
+    t0_preorder = datetime.now(tz=UTC)
+    for _ in range(number_of_test_iterations):
+        _ = preorder_samples(samples)
+    t1_preorder = datetime.now(tz=UTC)
+    time_preorder = t1_preorder - t0_preorder
+
+    t0_preorder_32 = datetime.now(tz=UTC)
+    for _ in range(number_of_test_iterations):
+        _ = preorder_samples_32(samples)
+    t1_preorder_32 = datetime.now(tz=UTC)
+    time_preorder_32 = t1_preorder_32 - t0_preorder_32
+    print(  # noqa: T201
+        f"\narrange  : {time_arrange.microseconds} "
+        f"\npreorder : {time_preorder.microseconds}"
+        f"\npreorder_32 : {time_preorder_32.microseconds}"
     )
