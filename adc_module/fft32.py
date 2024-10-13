@@ -269,11 +269,9 @@ def preorder_samples_32(samples: list[float]) -> list[float]:
 
 
 def fft_term_32(
-    initial_fft_term: list[tuple[float, float]],
+    fft_term: list[tuple[float, float]],
     w_terms: dict[int, tuple[float, float]],
 ) -> tuple[float, float]:
-
-    fft_term: list[tuple[float, float]] = list(initial_fft_term)
 
     size = 1
 
@@ -313,7 +311,7 @@ def fft32(
 
     return [
         fft_term_32(
-            initial_fft_term=initial_fft_term,
+            fft_term=list(initial_fft_term),
             w_terms=K_W_TERMS_32[k_index],
         )
         for k_index in (
