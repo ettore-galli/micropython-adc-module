@@ -1,3 +1,6 @@
+SAMPLE_LENGTH: int = 32
+HALF_SAMPLE_LENGTH: int = 16
+
 K_W_TERMS_32 = {
     0: {
         2: (1.0, -0.0),
@@ -314,7 +317,7 @@ def fft32(
             w_terms=K_W_TERMS_32[k_index],
         )
         for k_index in (
-            range(len(samples) // 2) if compute_half_range else range(len(samples))
+            range(HALF_SAMPLE_LENGTH) if compute_half_range else range(SAMPLE_LENGTH)
         )
     ]
 
