@@ -1,7 +1,7 @@
 from adc_module.fft32 import (
     fft32,
     fft32_power,
-    preorder_samples_32,
+    prepare_preordered_samples_32,
 )
 
 EXAMPLE_SAMPLES = [
@@ -81,7 +81,7 @@ def complex_mod(term: tuple[float, float]) -> float:
     return (term[0] ** 2 + term[1] ** 2) ** 0.5
 
 
-def test_preorder_samples_32() -> None:
+def test_prepare_preordered_samples_32() -> None:
     samples = [
         float(sample)
         for sample in [
@@ -120,7 +120,7 @@ def test_preorder_samples_32() -> None:
         ]
     ]
     expected_preorder = [
-        float(sample)
+        (float(sample), 0.0)
         for sample in [
             0,
             16,
@@ -156,7 +156,7 @@ def test_preorder_samples_32() -> None:
             31,
         ]
     ]
-    assert preorder_samples_32(samples) == expected_preorder
+    assert prepare_preordered_samples_32(samples) == expected_preorder
 
 
 def test_fft32() -> None:

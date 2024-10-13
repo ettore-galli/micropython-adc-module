@@ -3,7 +3,7 @@ from math import sin
 
 from adc_module.dft import DftCalculator, dft
 from adc_module.fft import arrange_samples, fft, preorder_samples
-from adc_module.fft32 import fft32, fft32_power, preorder_samples_32
+from adc_module.fft32 import fft32, fft32_power, prepare_preordered_samples_32
 
 
 def test_performance() -> None:
@@ -81,7 +81,7 @@ def test_performance_preorder() -> None:
 
     t0_preorder_32 = datetime.now(tz=UTC)
     for _ in range(number_of_test_iterations):
-        _ = preorder_samples_32(samples)
+        _ = prepare_preordered_samples_32(samples)
     t1_preorder_32 = datetime.now(tz=UTC)
     time_preorder_32 = t1_preorder_32 - t0_preorder_32
     print(  # noqa: T201

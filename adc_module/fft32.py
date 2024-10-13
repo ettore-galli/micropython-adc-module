@@ -231,7 +231,7 @@ K_W_TERMS_32 = {
 SIZES = [(2, 1), (4, 2), (8, 4), (16, 8), (32, 16)]
 
 
-def preorder_samples_32(samples: list[float]) -> list[float]:
+def prepare_preordered_samples_32(samples: list[float]) -> list[tuple[float, float]]:
     order = [
         0,
         16,
@@ -267,7 +267,7 @@ def preorder_samples_32(samples: list[float]) -> list[float]:
         31,
     ]
 
-    return [samples[index] for index in order]
+    return [(samples[index], 0.0) for index in order]
 
 
 def fft_term_32(
@@ -294,11 +294,9 @@ def fft32(
     samples: list[float], *, compute_half_range: bool = True
 ) -> list[tuple[float, float]]:
 
-    reordered_samples = preorder_samples_32(samples=samples)
-
-    initial_fft_term: list[tuple[float, float]] = [
-        (sample, 0.0) for sample in reordered_samples
-    ]
+    initial_fft_term: list[tuple[float, float]] = prepare_preordered_samples_32(
+        samples=samples
+    )
 
     return [
         fft_term_32(
