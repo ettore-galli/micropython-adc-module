@@ -273,30 +273,30 @@ def fft_term_32(
     w_terms: dict[int, tuple[float, float]],
 ) -> tuple[float, float]:
 
-    fft_term: list[tuple[float, float]] = initial_fft_term
+    fft_term: list[tuple[float, float]] = list(initial_fft_term)
 
     size = 1
 
-    while len(fft_term) > 1:
+    while size < SAMPLE_LENGTH:
         size = size << 1
 
         w_k_term_r, w_k_term_i = w_terms[size]
 
-        fft_term = [
-            (
+        step: int = size // 2
+
+        for index in range(0, SAMPLE_LENGTH, size):
+            fft_term[index] = (
                 (
                     fft_term[index][0]
-                    + w_k_term_r * fft_term[index + 1][0]
-                    - w_k_term_i * fft_term[index + 1][1]
+                    + w_k_term_r * fft_term[index + step][0]
+                    - w_k_term_i * fft_term[index + step][1]
                 ),
                 (
                     fft_term[index][1]
-                    + w_k_term_i * fft_term[index + 1][0]
-                    + w_k_term_r * fft_term[index + 1][1]
+                    + w_k_term_i * fft_term[index + step][0]
+                    + w_k_term_r * fft_term[index + step][1]
                 ),
             )
-            for index in range(0, len(fft_term), 2)
-        ]
 
     return fft_term[0]
 
