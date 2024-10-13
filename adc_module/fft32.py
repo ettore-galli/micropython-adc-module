@@ -280,17 +280,11 @@ def fft_term_32(
         w_k_term_r, w_k_term_i = w_terms[size]
 
         for index in range(0, SAMPLE_LENGTH, size):
+            fft_a_r, fft_a_i = fft_term[index]
+            fft_b_r, fft_b_i = fft_term[index + step]
             fft_term[index] = (
-                (
-                    fft_term[index][0]
-                    + w_k_term_r * fft_term[index + step][0]
-                    - w_k_term_i * fft_term[index + step][1]
-                ),
-                (
-                    fft_term[index][1]
-                    + w_k_term_i * fft_term[index + step][0]
-                    + w_k_term_r * fft_term[index + step][1]
-                ),
+                (fft_a_r + w_k_term_r * fft_b_r - w_k_term_i * fft_b_i),
+                (fft_a_i + w_k_term_i * fft_b_r + w_k_term_r * fft_b_i),
             )
 
     return fft_term[0]
