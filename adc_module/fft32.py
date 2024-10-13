@@ -280,19 +280,19 @@ def fft_term_32(
     while len(fft_term) > 1:
         size = size << 1
 
-        w_k_term = w_terms[size]
+        w_k_term_r, w_k_term_i = w_terms[size]
 
         fft_term = [
             (
                 (
                     fft_term[index][0]
-                    + w_k_term[0] * fft_term[index + 1][0]
-                    - w_k_term[1] * fft_term[index + 1][1]
+                    + w_k_term_r * fft_term[index + 1][0]
+                    - w_k_term_i * fft_term[index + 1][1]
                 ),
                 (
                     fft_term[index][1]
-                    + w_k_term[1] * fft_term[index + 1][0]
-                    + w_k_term[0] * fft_term[index + 1][1]
+                    + w_k_term_i * fft_term[index + 1][0]
+                    + w_k_term_r * fft_term[index + 1][1]
                 ),
             )
             for index in range(0, len(fft_term), 2)
