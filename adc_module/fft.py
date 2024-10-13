@@ -21,6 +21,28 @@ def arrange_samples(samples: list[float]) -> list[float]:
     return arranged
 
 
+def preorder_samples(samples: list[float]) -> list[float]:
+    size: int = len(samples)
+    arranged: list[float] = samples
+
+    while size > 1:
+
+        for start in range(0, len(samples), size):
+            for chunk_index in range(size // 2):
+                for swap_delta in range(chunk_index):
+                    (
+                        arranged[start + chunk_index],
+                        arranged[start + chunk_index + swap_delta + 1],
+                    ) = (
+                        arranged[start + chunk_index + swap_delta + 1],
+                        arranged[start + chunk_index],
+                    )
+
+        size = size >> 1
+
+    return arranged
+
+
 def fft_term(
     initial_fft_term: list[tuple[float, float]],
     k_index: int,

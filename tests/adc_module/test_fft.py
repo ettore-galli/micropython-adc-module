@@ -1,4 +1,4 @@
-from adc_module.fft import arrange_samples, fft, fft_power
+from adc_module.fft import arrange_samples, fft, fft_power, preorder_samples
 
 EXAMPLE_SAMPLES = [
     0.0,
@@ -80,6 +80,30 @@ def complex_mod(term: tuple[float, float]) -> float:
 def test_arrange_samples() -> None:
     assert arrange_samples([1, 2, 3, 4, 5, 6, 7, 8]) == [1, 5, 3, 7, 2, 6, 4, 8]
     assert arrange_samples([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]) == [
+        1,
+        9,
+        5,
+        13,
+        3,
+        11,
+        7,
+        15,
+        2,
+        10,
+        6,
+        14,
+        4,
+        12,
+        8,
+        16,
+    ]
+
+
+def test_preorder_samples() -> None:
+    assert preorder_samples([1, 2, 3, 4, 5, 6, 7, 8]) == [1, 5, 3, 7, 2, 6, 4, 8]
+    assert preorder_samples(
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    ) == [
         1,
         9,
         5,
