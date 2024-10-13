@@ -3,7 +3,7 @@ from math import sin
 
 from adc_module.dft import dft
 from adc_module.fft import fft
-from adc_module.fft32 import fft32
+from adc_module.fft32 import fft32, fft32_power
 
 
 def profile_fft(data_size: int, number_of_runs: int) -> None:
@@ -50,9 +50,25 @@ def profile_fft32(data_size: int, number_of_runs: int) -> None:
         fft32(samples)
 
 
+def profile_fft32_power(data_size: int, number_of_runs: int) -> None:
+    domain = range(data_size)
+    samples = [
+        (
+            sin(3 * 6.28 * index / len(domain))
+            + sin(3 * 6.28 * 2 * index / len(domain))
+            + sin(3 * 6.28 * 3 * index / len(domain))
+        )
+        for index in domain
+    ]
+
+    for _ in range(number_of_runs):
+        fft32_power(samples)
+
+
 if __name__ == "__main__":
-    number_of_runs: int = 1000
+    number_of_runs: int = 5000
     data_size: int = 32
-    profile.run("profile_fft(data_size, number_of_runs)")
-    profile.run("profile_dft(data_size, number_of_runs)")
+    # Not necessary: profile.run("profile_fft(data_size, number_of_runs)")
+    # Not necessary: profile.run("profile_dft(data_size, number_of_runs)")
     profile.run("profile_fft32(data_size, number_of_runs)")
+    # Not necessary: profile.run("profile_fft32_power(data_size, number_of_runs)")
