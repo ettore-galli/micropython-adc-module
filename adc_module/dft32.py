@@ -1089,6 +1089,42 @@ TWIDDLE_FACTORS = {
     },
 }
 
+FULL_RANGE = (
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+)
+HALF_RANGE = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
+
 
 def dft32(
     samples: list[float], *, compute_half_range: bool = True
@@ -1100,26 +1136,21 @@ def dft32(
     https://en.wikipedia.org/wiki/Discrete_Fourier_transform
     """
 
-    n_samples: int = int(len(samples))
-    index_range = range(n_samples)
-    half_range = range(n_samples // 2)
-
     def dft_term(samples: list[float], k_index: int) -> tuple[float, float]:
         k_twiddle = TWIDDLE_FACTORS[k_index]
         return (
-            sum(samples[index] * k_twiddle[index][0] for index in index_range),
-            sum(samples[index] * k_twiddle[index][1] for index in index_range),
+            sum(samples[index] * k_twiddle[index][0] for index in FULL_RANGE),
+            sum(samples[index] * k_twiddle[index][1] for index in FULL_RANGE),
         )
 
     return [
         dft_term(samples=samples, k_index=index)
-        for index in (half_range if compute_half_range else index_range)
+        for index in (HALF_RANGE if compute_half_range else FULL_RANGE)
     ]
 
 
-def complex_mod(term: tuple[float, float]) -> float:
-    return (term[0] ** 2 + term[1] ** 2) ** 0.5
-
-
 def dft32_power(samples: list[float]) -> list[float]:
-    return [complex_mod(item) for item in dft32(samples, compute_half_range=True)]
+    return [
+        (point[0] ** 2 + point[1] ** 2) ** 0.5
+        for point in dft32(samples, compute_half_range=True)
+    ]
