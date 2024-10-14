@@ -2,6 +2,7 @@ from datetime import UTC, datetime
 from math import sin
 
 from adc_module.dft import DftCalculator, dft
+from adc_module.dft32 import dft32
 from adc_module.fft import arrange_samples, fft, preorder_samples
 from adc_module.fft32 import fft32, fft32_power, prepare_preordered_samples_32
 
@@ -45,6 +46,12 @@ def test_performance() -> None:
     t1f32 = datetime.now(tz=UTC)
     time_fft32 = t1f32 - t0f32
 
+    t0d32p = datetime.now(tz=UTC)
+    for _ in range(number_of_test_iterations):
+        _ = dft32(samples)
+    t1d32p = datetime.now(tz=UTC)
+    time_dft32p = t1d32p - t0d32p
+
     t0f32p = datetime.now(tz=UTC)
     for _ in range(number_of_test_iterations):
         _ = fft32_power(samples)
@@ -60,6 +67,7 @@ def test_performance() -> None:
         f"\nFFT/standard : {time_fft.microseconds}"
         f"\nFFT/fft32    : {time_fft32.microseconds}"
         f"\nFFT/fft32 pow: {time_fft32p.microseconds}"
+        f"\nDFT/dft32    : {time_dft32p.microseconds}"
     )
 
 
