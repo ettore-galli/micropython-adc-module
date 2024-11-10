@@ -15,6 +15,6 @@ pip install esptool
 ```shell
 export UPORT=$(ls -1 /dev/* | grep tty.usbserial | head)
 esptool.py --port "${UPORT}" erase_flash
-esptool.py --port "${UPORT}" --baud 460800 write_flash --flash_size=detect 0 firmware/ESP8266_GENERIC-20240602-v1.23.0.bin
-
+#  [old] esptool.py --port "${UPORT}" --baud 460800 write_flash --flash_size=detect 0 firmware/ESP8266_GENERIC-20240602-v1.23.0.bin
+esptool.py --port "${UPORT}" --baud 460800 write_flash --flash_size=detect 0 firmware/ESP8266_GENERIC-20241025-v1.24.0.bin
 ```
