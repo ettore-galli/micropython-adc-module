@@ -4,14 +4,21 @@
 
 SignalPloter plotter(display);
 
+const unsigned intervalMicros = 100;
+unsigned long latsTick = 0;
+
 void setup()
 {
   displaySetup();
+  latsTick = 0;
 }
 
 void loop()
 {
-
-  plotter.pushValue(analogRead(A0 / 32));
-  delayMicroseconds(100);
+  unsigned long current = micros();
+  if (current - latsTick > intervalMicros)
+  {
+    plotter.pushValue(analogRead(A0 / 32));
+    latsTick = current;
+  }
 }
