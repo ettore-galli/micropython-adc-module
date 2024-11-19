@@ -8,12 +8,13 @@ public:
     int16_t _samples{SCREEN_WIDTH};
     int16_t _x;
     int16_t _values[SCREEN_WIDTH];
-    DisplayDevice _display;
+    // DisplayDevice *_display;
 
-    SignalPlotter(DisplayDevice display) : _x(0), _display(display)
+    // SignalPlotter(DisplayDevice *display) : _x(0), _display(display)
+    SignalPlotter()  
     {
         _x = 0;
-        _display = display;
+        // _display = display;
     };
 
     void displayValuesChunk()

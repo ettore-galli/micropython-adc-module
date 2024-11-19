@@ -2,14 +2,14 @@
 #include <string>
 #include "display.h"
 
-SignalPlotter* plotter;
+SignalPlotter *plotter;
 
 const unsigned intervalMicros = 100;
 unsigned long latsTick = 0;
 
 void setup()
 {
-  plotter = new SignalPlotter(display);
+  plotter = new SignalPlotter();
   displaySetup();
   latsTick = 0;
 }
