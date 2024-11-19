@@ -2,13 +2,14 @@
 #include <string>
 #include "display.h"
 
-SignalPloter plotter(display);
+SignalPlotter* plotter;
 
 const unsigned intervalMicros = 100;
 unsigned long latsTick = 0;
 
 void setup()
 {
+  plotter = new SignalPlotter(display);
   displaySetup();
   latsTick = 0;
 }
@@ -18,7 +19,7 @@ void loop()
   unsigned long current = micros();
   if (current - latsTick > intervalMicros)
   {
-    plotter.pushValue(analogRead(A0 / 32));
+    plotter->pushValue(analogRead(A0 / 32));
     latsTick = current;
   }
 }

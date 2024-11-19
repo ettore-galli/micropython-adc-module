@@ -2,7 +2,7 @@
 #include <display_device.h>
 #include <display_base.h>
 
-class SignalPloter
+class SignalPlotter
 {
 public:
     int16_t _samples{SCREEN_WIDTH};
@@ -10,7 +10,7 @@ public:
     int16_t _values[SCREEN_WIDTH];
     DisplayDevice _display;
 
-    SignalPloter(DisplayDevice display) : _x(0), _display(display)
+    SignalPlotter(DisplayDevice display) : _x(0), _display(display)
     {
         _x = 0;
         _display = display;
