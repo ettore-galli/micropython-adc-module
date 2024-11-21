@@ -2,6 +2,7 @@
 #include <string>
 #include "display.h"
 
+
 SignalPlotter *plotter;
 
 const unsigned intervalMicros = 100;
