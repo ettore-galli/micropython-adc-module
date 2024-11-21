@@ -8,8 +8,13 @@
 class DisplayDevice : public Adafruit_SSD1306
 {
 public:
-  DisplayDevice(uint8_t w, uint8_t h, TwoWire *twi = &Wire,
-                int8_t rst_pin = -1) : Adafruit_SSD1306(w, h, twi, rst_pin) {}
+  DisplayDevice(
+      uint8_t w,
+      uint8_t h,
+      TwoWire *twi = &Wire,
+      int8_t rst_pin = -1) : Adafruit_SSD1306(w, h, twi, rst_pin)
+  {
+  }
 };
 
 extern DisplayDevice display;

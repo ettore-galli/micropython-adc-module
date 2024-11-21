@@ -9,7 +9,7 @@ unsigned long latsTick = 0;
 
 void setup()
 {
-  plotter = new SignalPlotter();
+  plotter = new SignalPlotter(display);
   displaySetup();
   latsTick = 0;
 }
