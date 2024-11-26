@@ -1,22 +1,25 @@
-#include <Arduino.h>
-#include <string>
-#include "display.h"
 
+#include <Arduino.h>
+#include <signal_plotter.h>
 
 SignalPlotter *plotter;
 
 const unsigned intervalMicros = 100;
 unsigned long latsTick = 0;
 
-void setup()
+void setup(void)
 {
-  plotter = new SignalPlotter(display);
-  displaySetup();
+  plotter = new SignalPlotter();
+  display.begin();
+  Serial.begin(9600);
   latsTick = 0;
 }
 
-void loop()
+#include <WString.h>
+
+void loop(void)
 {
+
   unsigned long current = micros();
   if (current - latsTick > intervalMicros)
   {
