@@ -6,7 +6,6 @@
 class SignalPlotter
 {
 public:
-    int16_t _samples{SCREEN_WIDTH};
     int16_t _x;
     int16_t _values[SCREEN_WIDTH];
 
@@ -29,7 +28,7 @@ public:
     void pushValue(int16_t v)
     {
         _x++;
-        if (_x > _samples)
+        if (_x > SCREEN_WIDTH)
         {
             displayValuesChunk();
             _x = 0;
