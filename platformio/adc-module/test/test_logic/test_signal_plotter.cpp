@@ -48,9 +48,9 @@ void signal_plotter_basic(void)
     sp->pushValue((int16_t)222);
     sp->pushValue((int16_t)333);
 
-    TEST_ASSERT_EQUAL(111, sp->_values[1]);
-    TEST_ASSERT_EQUAL(222, sp->_values[2]);
-    TEST_ASSERT_EQUAL(333, sp->_values[3]);
+    TEST_ASSERT_EQUAL(111, sp->_values[0]);
+    TEST_ASSERT_EQUAL(222, sp->_values[1]);
+    TEST_ASSERT_EQUAL(333, sp->_values[2]);
 }
 
 void signal_plotter_triggers_plot_after_buffer_full(void)

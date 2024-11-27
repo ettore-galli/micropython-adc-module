@@ -27,12 +27,12 @@ public:
 
     void pushValue(int16_t v)
     {
-        _x++;
-        if (_x > SCREEN_WIDTH)
+        if (_x == SCREEN_WIDTH)
         {
             displayValuesChunk();
             _x = 0;
         }
         _values[_x] = v;
+        _x++;
     };
 };
