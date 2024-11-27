@@ -16,33 +16,15 @@ void setup(void)
     s = 0;
 }
 
-void linear_signal()
+void sine_signal(int phase)
 {
-    int h = s / 4;
+    int w = display.getWidth();
+    int h = 16 + int(16 * sin(2 * M_PI * s / (w + phase)));
     plotter->pushValue(h);
-}
-void linear_signal_inv()
-{
-    int h = 32 - s / 4;
-    plotter->pushValue(h);
-}
-
-void sine_signal()
-{
-    int h = 16 + int(16 * sin(2 * M_PI * s / 132));
-    plotter->pushValue(h);
-}
-
-void cosine_signal()
-{
-    int h = 16 + int(16 * cos(2 * M_PI * s / 132));
-    plotter->pushValue(h);
+    s = (s + 1) % (w + phase);
 }
 
 void loop(void)
 {
-
-    sine_signal();
-
-    s = (s + 1) % display.getWidth();
+    sine_signal(3);
 }
