@@ -9,6 +9,7 @@ unsigned long latsTick = 0;
 
 void setup(void)
 {
+  pinMode(D0, INPUT);
   plotter = new SignalPlotter();
   display.begin();
   Serial.begin(9600);
@@ -22,8 +23,16 @@ void loop(void)
 
   unsigned long current = micros();
   if (current - latsTick > intervalMicros)
+
   {
-    plotter->pushValue(analogRead(A0 / 32));
-    latsTick = current;
+    if (digitalRead(D0) == HIGH)
+    {
+      plotter->viewFreezed();
+    }
+    else
+    {
+      plotter->pushValue(analogRead(A0 / 32));
+      latsTick = current;
+    }
   }
 }

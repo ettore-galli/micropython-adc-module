@@ -20,7 +20,8 @@ void displayValuesChunkAsHistogram(int16_t values[SCREEN_WIDTH])
     display.setDrawColor(1);
     for (int16_t x = 0; x < SCREEN_WIDTH; ++x)
     {
-        display.drawVLine(x, display.getDisplayHeight() - values[x], values[x]);
+        int16_t currentValue = values[x];
+        display.drawVLine(x, display.getDisplayHeight() - currentValue, currentValue);
     }
     display.sendBuffer();
 }
@@ -28,6 +29,7 @@ void displayValuesChunkAsHistogram(int16_t values[SCREEN_WIDTH])
 class SignalPlotter
 {
 public:
+    bool _hold;
     int16_t _x;
     int16_t _values[SCREEN_WIDTH];
     int (*func)(int, int);
@@ -49,4 +51,8 @@ public:
         _values[_x] = v;
         _x++;
     };
+    void viewFreezed()
+    {
+        _screenDraw(_values);
+    }
 };
