@@ -12,10 +12,11 @@ public:
 
     void sendBuffer(void) {};
     void clearBuffer(void) {};
-    void drawPixel(uint16_t x, uint16_t y)
-    {
-        count++;
-    };
+    void drawPixel(uint16_t x, uint16_t y) { count++; };
+    void setDrawColor(uint8_t color_index) {};
+    void drawVLine(uint8_t x, uint8_t y, uint8_t h) { count++; };
+    uint8_t getDisplayHeight(void) { return 32; };
+    uint8_t getDisplayWidth(void) { return 128; };
 };
 
 DisplayDevice display;
@@ -65,9 +66,9 @@ void signal_plotter_triggers_plot_after_buffer_full(void)
     }
 
     TEST_ASSERT_EQUAL(0, display.count);
-    
+
     sp->pushValue(0);
-    
+
     TEST_ASSERT_EQUAL(128, display.count);
 }
 
