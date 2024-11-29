@@ -6,10 +6,11 @@
 void displayValuesChunkAsLine(int16_t values[SCREEN_WIDTH])
 {
     display.clearBuffer();
-
+    display.setDrawColor(1);
     for (int16_t x = 0; x < SCREEN_WIDTH; ++x)
     {
-        display.drawPixel(x, values[x]);
+        int16_t currentValue = values[x];
+        display.drawPixel(x, currentValue);
     }
     display.sendBuffer();
 }
@@ -20,7 +21,7 @@ void displayValuesChunkAsHistogram(int16_t values[SCREEN_WIDTH])
     display.setDrawColor(1);
     for (int16_t x = 0; x < SCREEN_WIDTH; ++x)
     {
-        int16_t currentValue = values[x];
+        int16_t currentValue = values[x] / 32;
         display.drawVLine(x, display.getDisplayHeight() - currentValue, currentValue);
     }
     display.sendBuffer();

@@ -16,7 +16,15 @@ void setup(void)
   latsTick = 0;
 }
 
-#include <WString.h>
+int16_t readAnalogValue()
+{
+  return analogRead(A0);
+}
+
+int readFreezeButton()
+{
+  return digitalRead(D0);
+}
 
 void loop(void)
 {
@@ -25,13 +33,13 @@ void loop(void)
   if (current - latsTick > intervalMicros)
 
   {
-    if (digitalRead(D0) == HIGH)
+    if (readFreezeButton() == HIGH)
     {
       plotter->viewFreezed();
     }
     else
     {
-      plotter->pushValue(analogRead(A0 / 32));
+      plotter->pushValue(readAnalogValue());
       latsTick = current;
     }
   }
