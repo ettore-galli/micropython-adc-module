@@ -3,6 +3,11 @@
 
 #define SCREEN_WIDTH 128
 
+int16_t compressValue(int16_t value)
+{
+    return value / 32;
+}
+
 void displayValuesChunkAsLine(int16_t values[SCREEN_WIDTH])
 {
     display.clearBuffer();
@@ -21,7 +26,7 @@ void displayValuesChunkAsHistogram(int16_t values[SCREEN_WIDTH])
     display.setDrawColor(1);
     for (int16_t x = 0; x < SCREEN_WIDTH; ++x)
     {
-        int16_t currentValue = values[x] / 32;
+        int16_t currentValue = compressValue(values[x]);
         display.drawVLine(x, display.getDisplayHeight() - currentValue, currentValue);
     }
     display.sendBuffer();
