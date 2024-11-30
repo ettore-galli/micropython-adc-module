@@ -4,8 +4,8 @@
 
 SignalPlotter *plotter;
 
-const unsigned intervalMicros = 100;
-unsigned long latsTick = 0;
+const unsigned intervalMicros = 250;
+unsigned long lastTick = 0;
 
 void setup(void)
 {
@@ -13,7 +13,7 @@ void setup(void)
   plotter = new SignalPlotter();
   display.begin();
   Serial.begin(9600);
-  latsTick = 0;
+  lastTick = 0;
 }
 
 int16_t readAnalogValue()
@@ -30,7 +30,7 @@ void loop(void)
 {
 
   unsigned long current = micros();
-  if (current - latsTick > intervalMicros)
+  if (current - lastTick > intervalMicros)
 
   {
     if (readFreezeButton() == HIGH)
@@ -40,7 +40,7 @@ void loop(void)
     else
     {
       plotter->pushValue(readAnalogValue());
-      latsTick = current;
+      lastTick = current;
     }
   }
 }
